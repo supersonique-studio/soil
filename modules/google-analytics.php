@@ -15,17 +15,17 @@ function load_script() {
   $dummyGA = (defined('WP_ENV') && WP_ENV !== 'production') || current_user_can('manage_options');
   ?>
   <script>
-    <?php if (apply_filters('soil/dummyGA', $dummyGA)) : ?>
-      function ga() {if (window.console) {console.log('Google Analytics: ' + [].slice.call(arguments));}}
-    <?php else : ?>
-      (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
-      function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
-      e=o.createElement(i);r=o.getElementsByTagName(i)[0];
-      e.src='//www.google-analytics.com/analytics.js';
-      r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-    <?php endif; ?>
-    ga('create','<?= $gaID; ?>','auto');ga('send','pageview');
+    ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
+    ga('create','<?= $gaID; ?>','auto');ga('send','pageview')
   </script>
+  <?php if (apply_filters('soil/dummyGA', $dummyGA)) : ?>
+    <script>
+      (function(w,Q){w.ga=function(){console.log('Google Analytics: '+[].slice
+      .call(arguments));};Q.forEach(function(q){ga.apply(ga,q);});})(window,ga.q);
+    </script>
+  <?php else : ?>
+    <script src="https://www.google-analytics.com/analytics.js" async defer></script>
+  <?php endif; ?>
 <?php
 }
 
